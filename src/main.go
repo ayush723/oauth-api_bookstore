@@ -4,7 +4,7 @@ import (
 	"github.com/ayush723/oauth-api_bookstore/src/app"
 )
 
-func main(){
+func main() {
 	app.StartApplication()
 
 }
