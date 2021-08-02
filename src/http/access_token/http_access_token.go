@@ -16,7 +16,7 @@ type accessTokenHandler struct {
 }
 
 func NewHandler(service access_token.Service) AccessTokenHandler {
-	
+
 	return &accessTokenHandler{
 		service: service,
 	}

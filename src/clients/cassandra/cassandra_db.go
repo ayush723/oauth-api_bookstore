@@ -4,18 +4,18 @@ import (
 	"github.com/gocql/gocql"
 )
 
-var(
+var (
 	cluster *gocql.ClusterConfig
 )
- 
-func init(){
+
+func init() {
 	//Connect to cassandra cluster:
 	cluster = gocql.NewCluster("127.0.0.1")
 	cluster.Keyspace = "oauth"
 	cluster.Consistency = gocql.Quorum
-	
+
 }
 
-func GetSession()(*gocql.Session, error ){
+func GetSession() (*gocql.Session, error) {
 	return cluster.CreateSession()
 }

@@ -30,8 +30,8 @@ func (s *service) GetById(accessTokenId string) (*AccessToken, *errors.RestErr) 
 		return nil, errors.NewBadRequestError("invalid access token id")
 	}
 	accessToken, err := s.repository.GetById(accessTokenId)
-	if err != nil{
-		return nil,err
+	if err != nil {
+		return nil, err
 	}
 	return accessToken, nil
 }
