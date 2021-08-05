@@ -9,21 +9,25 @@ import (
 )
 
 var (
+	//client is a http client
 	client = resty.New()
 	
 )
+
+//RestusersRepository implements the Loginuser method
 type RestUsersRepository interface{
 	LoginUser(string,string)(*users.User, *errors.RestErr)
 }
 
 type usersRepository struct{}
 
+//NewRestUsersRepository returns a instance of type RestUsersRepositry interface(containing dbRepository struct) to mock the methods.
 func NewRestUsersRepository() RestUsersRepository{
 	return &usersRepository{}
 }
 
 
-
+//LoginUser consumes the api from users api(users/login)
 func (r *usersRepository) LoginUser(email string, password string)(*users.User, *errors.RestErr){
 	request := users.UserLoginRequest{
 		Email: email,
@@ -35,13 +39,13 @@ func (r *usersRepository) LoginUser(email string, password string)(*users.User, 
 	SetBody(request).
 	Post("https://api.bookstore.com/users/login")
 
-	// response, err := client.R().EnableTrace().Post("https://api.bookstore.com/users/login")
+	// checking error in post method
 	if err != nil{
 		return nil, errors.NewInternalServerError("error in the api")
 	}
 
 
-
+	//checking error in response
 	if response == nil || response.Request == nil {
 		return nil, errors.NewInternalServerError("invalid restclient response when trying to login user")
 
@@ -54,6 +58,7 @@ func (r *usersRepository) LoginUser(email string, password string)(*users.User, 
 		}
 		return nil, &restErr
 	}
+	// if response is ok, we unmarshal the response body
 	var user users.User
 	if err := json.Unmarshal(response.Body(), &user); err != nil{
 		return nil, errors.NewInternalServerError("error when trying to unmarshal users response")

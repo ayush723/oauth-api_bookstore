@@ -2,9 +2,8 @@ package db
 
 import (
 	"github.com/ayush723/oauth-api_bookstore/src/clients/cassandra"
-	"github.com/gocql/gocql"
-
 	"github.com/ayush723/oauth-api_bookstore/src/domain/access_token"
+	"github.com/gocql/gocql"
 
 	"github.com/ayush723/oauth-api_bookstore/src/utils/errors"
 )
@@ -15,11 +14,12 @@ const (
 	queryUpdateExpires     = "UPDATE access_tokens SET expires=? WHERE access_token=?;"
 )
 
-//NewRepository returns a variable of type DbRepositry interface(containing dbRepository struct) to mock the methods.
+//NewRepository returns a instance of type DbRepositry interface(containing dbRepository struct) to mock the methods.
 func NewRepository() DbRepository {
 	return &dbRepository{}
 }
 
+//DbRepository implements all methods on access_token on database level
 type DbRepository interface {
 	GetById(string) (*access_token.AccessToken, *errors.RestErr)
 	Create(access_token.AccessToken) *errors.RestErr
@@ -29,18 +29,20 @@ type DbRepository interface {
 type dbRepository struct {
 }
 
+//GetById get access_token details from db
 func (r *dbRepository) GetById(id string) (*access_token.AccessToken, *errors.RestErr) {
 
-	var result *access_token.AccessToken
+	var result access_token.AccessToken
 	if err := cassandra.GetSession().Query(queryGetAccessToken, id).Scan(&result.AccessToken, &result.UserId, &result.ClientId, &result.Expires); err != nil {
 		if err == gocql.ErrNotFound {
 			return nil, errors.NewNotFoundError("no acess token found with given id")
 		}
-		return nil, errors.NewInternalServerError(err.Error())
+		return nil, errors.NewInternalServerError("error when trying to get current id")
 	}
 	return &result, nil
 }
 
+//Create creates new access_token in database
 func (r *dbRepository) Create(at access_token.AccessToken) *errors.RestErr {
 
 	if err := cassandra.GetSession().Query(queryCreateAccessToken, at.AccessToken, at.UserId, at.ClientId, at.Expires).Exec(); err != nil {
@@ -49,10 +51,11 @@ func (r *dbRepository) Create(at access_token.AccessToken) *errors.RestErr {
 	return nil
 }
 
+//UpdateExpirationTime updates the expiration time of gien access_token
 func (r *dbRepository) UpdateExpirationTime(at access_token.AccessToken) *errors.RestErr {
 
 	if err := cassandra.GetSession().Query(queryUpdateExpires, at.Expires, at.AccessToken).Exec(); err != nil {
-		return errors.NewInternalServerError(err.Error())
+		return errors.NewInternalServerError("error when trying to update expiration time")
 	}
 	return nil
 }

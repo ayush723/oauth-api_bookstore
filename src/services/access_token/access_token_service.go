@@ -9,16 +9,11 @@ import (
 	"github.com/ayush723/oauth-api_bookstore/src/utils/errors"
 )
 
-// type Repository interface {
-// 	GetById(string) (*AccessToken, *errors.RestErr)
-// 	Create(AccessTokenRequest) (*AccessToken, *errors.RestErr)
-// 	UpdateExpirationTime(AccessToken) *errors.RestErr
-// }
-
+//Service implements methods on access_token
 type Service interface {
 	GetById(string) (*access_token.AccessToken, *errors.RestErr)
 	Create(access_token.AccessTokenRequest) (*access_token.AccessToken, *errors.RestErr)
-	UpdateExpirationTime(*access_token.AccessToken) *errors.RestErr
+	UpdateExpirationTime(access_token.AccessToken) *errors.RestErr
 }
 
 type service struct {
@@ -26,6 +21,7 @@ type service struct {
 	dbRepo        db.DbRepository
 }
 
+//Newservice returns instances of Service interface to mock methods.
 func NewService(usersRepo rest.RestUsersRepository, dbRepo db.DbRepository) Service {
 	return &service{
 		restUsersRepo: usersRepo,
@@ -66,7 +62,7 @@ func (s *service) Create(request access_token.AccessTokenRequest) (*access_token
 	return &at,nil
 }
 
-func (s *service) UpdateExpirationTime(at *access_token.AccessToken) *errors.RestErr {
+func (s *service) UpdateExpirationTime(at access_token.AccessToken) *errors.RestErr {
 	if err := at.Validate(); err != nil {
 		return err
 	}
