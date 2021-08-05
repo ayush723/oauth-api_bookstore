@@ -42,7 +42,7 @@ func (s *service) GetById(accessTokenId string) (*access_token.AccessToken, *err
 	if err != nil {
 		return nil, err
 	}
-	return &accessToken, nil
+	return accessToken, nil
 }
 
 func (s *service) Create(request access_token.AccessTokenRequest) (*access_token.AccessToken, *errors.RestErr ){

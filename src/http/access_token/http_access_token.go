@@ -3,7 +3,9 @@ package http
 import (
 	"net/http"
 
-	"github.com/ayush723/oauth-api_bookstore/src/domain/access_token"
+	"github.com/ayush723/oauth-api_bookstore/src/services/access_token"
+
+	// "github.com/ayush723/oauth-api_bookstore/src/domain/access_token"
 	"github.com/ayush723/oauth-api_bookstore/src/utils/errors"
 	"github.com/gin-gonic/gin"
 )
@@ -17,7 +19,7 @@ type accessTokenHandler struct {
 	service access_token.Service
 }
 
-func NewAcessTokenHandler(service access_token.Service) AccessTokenHandler {
+func NewAccessTokenHandler(service access_token.Service) AccessTokenHandler {
 
 	return &accessTokenHandler{
 		service: service,
