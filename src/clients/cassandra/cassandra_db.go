@@ -14,11 +14,11 @@ func init() {
 	cluster.Keyspace = "oauth"
 	cluster.Consistency = gocql.Quorum
 	var err error
-	if session, err = cluster.CreateSession(); err != nil{
+	if session, err = cluster.CreateSession(); err != nil {
 		panic(err)
 	}
 }
 
-func GetSession() (*gocql.Session) {
+func GetSession() *gocql.Session {
 	return session
 }
