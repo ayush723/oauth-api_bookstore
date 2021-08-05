@@ -12,13 +12,13 @@ var (
 	client = resty.New()
 	
 )
-type RestUserRepository interface{
+type RestUsersRepository interface{
 	LoginUser(string,string)(*users.User, *errors.RestErr)
 }
 
 type usersRepository struct{}
 
-func NewRepository() RestUserRepository{
+func NewRepository() RestUsersRepository{
 	return &usersRepository{}
 }
 

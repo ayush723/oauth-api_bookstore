@@ -17,7 +17,7 @@ type accessTokenHandler struct {
 	service access_token.Service
 }
 
-func NewHandler(service access_token.Service) AccessTokenHandler {
+func NewAcessTokenHandler(service access_token.Service) AccessTokenHandler {
 
 	return &accessTokenHandler{
 		service: service,
