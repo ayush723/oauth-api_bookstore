@@ -1,7 +1,6 @@
 package app
 
 import (
-	"github.com/ayush723/oauth-api_bookstore/src/clients/cassandra"
 	http "github.com/ayush723/oauth-api_bookstore/src/http/access_token"
 	"github.com/ayush723/oauth-api_bookstore/src/repository/db"
 	"github.com/ayush723/oauth-api_bookstore/src/repository/rest"
@@ -15,9 +14,6 @@ var (
 
 func StartApplication() {
 
-	session := cassandra.GetSession()
-
-	defer session.Close()
 	atHandler := http.NewAccessTokenHandler(access_token.NewService(rest.NewRestUsersRepository(), db.NewRepository()))
 	//fetching access_token
 	router.GET("/oauth/access_token/:access_token_id", atHandler.GetById)
